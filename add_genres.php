@@ -1,10 +1,53 @@
+<?php
+ 
+session_start();
+ 
+require_once('classes/database.php');
+$con = new database();
+ 
+$sweetAlertConfig = ""; //Initialize SweetAlert script variable
+ 
+if (isset($_POST['adds_genres'])) {
+ 
+  $genreName = $_POST['genre_name'];
+  $genreID = $con->addGenre($genreName);
+ 
+ 
+  if ($genreID) {
+ 
+    $sweetAlertConfig = "
+    <script>
+   
+    Swal.fire({
+        icon: 'success',
+        title: 'Author added successfully!',
+        text: 'The author has been successfully added to the system.',
+        confirmationButtontext: 'OK'
+     }).then((result) => {
+        if (result.isConfirmed) {
+            window.location.href = 'login.php'
+        }
+            });
+ 
+    </script>";
+ 
+  } else {
+ 
+    $_SESSION['error'] = "Sorry, there was an error signing up.";
+   
+  }
+ 
+}
+ 
+?>
+
 <!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="./bootstrap-5.3.3-dist/css/bootstrap.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css"> <!-- Correct Bootstrap Icons CSS -->
+<link rel="stylesheet" href="./bootstrap-5.3.3-dist/css/bootstrap.css">
+  <link rel="stylesheet" href="./package/dist/sweetalert2.css">
   <title>Genres</title>
 </head>
 <body>
@@ -46,16 +89,17 @@
 <div class="container my-5 border border-2 rounded-3 shadow p-4 bg-light">
 
   <h4 class="mt-5">Add New Genre</h4>
-  <form>
+  <form id="registrationForm" method="post" action="" novalidate>
     <div class="mb-3">
       <label for="genreName" class="form-label">Genre Name</label>
-      <input type="text" class="form-control" id="genreName" required>
+      <input type="text" name="genre_name" class="form-control" id="genreName" required>
     </div>
-    <button type="submit" class="btn btn-primary">Add Genre</button>
+    <button type="submit" name="adds_genres" class="btn btn-primary">Add Genre</button>
   </form>
+  <script src="./package/dist/sweetalert2.js"></script>
+  <?php echo $sweetAlertConfig; ?>
 </div>
 <script src="./bootstrap-5.3.3-dist/js/bootstrap.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script> <!-- Add Popper.js -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script> <!-- Correct Bootstrap JS -->
+
 </body>
 </html>

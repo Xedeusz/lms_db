@@ -1,10 +1,58 @@
+<?php
+ 
+session_start();
+ 
+require_once('classes/database.php');
+$con = new database();
+ 
+$sweetAlertConfig = ""; //Initialize SweetAlert script variable
+ 
+if (isset($_POST['add'])) {
+ 
+  $authorFN = $_POST['author_FN'];
+  $authorLN = $_POST['author_LN'];
+  $authorBD = $_POST['author_birthdate'];
+  $authorNat = $_POST['author_nat'];
+  $authorID = $con->addAuthor($authorFN, $authorLN, $authorBD, $authorNat);
+ 
+ 
+  if ($authorID) {
+ 
+    $sweetAlertConfig = "
+    <script>
+   
+    Swal.fire({
+        icon: 'success',
+        title: 'Author added successfully!',
+        text: 'The author has been successfully added to the system.',
+        confirmationButtontext: 'OK'
+     }).then((result) => {
+        if (result.isConfirmed) {
+            window.location.href = 'login.php'
+        }
+            });
+ 
+    </script>";
+ 
+  } else {
+ 
+    $_SESSION['error'] = "Sorry, there was an error signing up.";
+   
+  }
+ 
+}
+ 
+?>
+
+
+
 <!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="./bootstrap-5.3.3-dist/css/bootstrap.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css"> <!-- Correct Bootstrap Icons CSS -->
+  <link rel="stylesheet" href="./package/dist/sweetalert2.css">
   <title>Authors</title>
 </head>
 <body>
@@ -47,22 +95,22 @@
 
 
   <h4 class="mt-5">Add New Author</h4>
-  <form>
+  <form method="post" action="" novalidate>
     <div class="mb-3">
       <label for="authorFirstName" class="form-label">First Name</label>
-      <input type="text" class="form-control" id="authorFirstName" required>
+      <input type="text" name="author_FN" class="form-control" id="authorFirstName" required>
     </div>
     <div class="mb-3">
       <label for="authorLastName" class="form-label">Last Name</label>
-      <input type="text" class="form-control" id="authorLastName" required>
+      <input type="text" name="author_LN"  class="form-control" id="authorLastName" required>
     </div>
     <div class="mb-3">
-      <label for="authorBirthYear" class="form-label">Birth Date</label>
-      <input type="date" class="form-control" id="authorBirthYear" max="<?= date('Y-m-d') ?>" required>
+      <label for="authorBirthYear"  class="form-label">Birth Date</label>
+      <input type="date" name="author_birthdate" class="form-control" id="authorBirthYear" max="<?= date('Y-m-d') ?>" required>
     </div>
     <div class="mb-3">
-      <label for="authorNationality" class="form-label">Nationality</label>
-      <select class="form-select" id="authorNationality" required>
+      <label for="authorNationality"  class="form-label">Nationality</label>
+      <select class="form-select" name="author_nat" id="authorNationality" required>
         <option value="" disabled selected>Select Nationality</option>
         <option value="American">Filipino</option>
         <option value="American">American</option>
@@ -80,11 +128,12 @@
         <option value="Other">Other</option>
       </select>
     </div>
-    <button type="submit" class="btn btn-primary">Add Author</button>
+    <button type="submit" name="add" class="btn btn-primary">Add Author</button>
   </form>
+  <script src="./package/dist/sweetalert2.js"></script>
+  <?php echo $sweetAlertConfig; ?>
 </div>
 <script src="./bootstrap-5.3.3-dist/js/bootstrap.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script> <!-- Add Popper.js -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script> <!-- Correct Bootstrap JS -->
+
 </body>
 </html>

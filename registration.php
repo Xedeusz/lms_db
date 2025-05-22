@@ -52,7 +52,7 @@ if (isset($_POST['multisave'])) {
           confirmButtonText: 'OK'
         }).then((result) => {
         if (result.isConfirmed) {
-        window.location.href = 'login.php';
+        window.location.href = 'index.php';
         }
         });
         </script> ";
@@ -499,4 +499,3 @@ $(document).ready(function(){
   
   </body>
   </html>
-  

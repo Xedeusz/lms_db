@@ -4,16 +4,20 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="./bootstrap-5.3.3-dist/css/bootstrap.css">
+  <link rel="stylesheet" href="./bootstrap-5.3.3-dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css"> <!-- Correct Bootstrap Icons CSS -->
+
+    <!-- Bootstrap CSS -->
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
   <title>Borrowers</title>
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
           <a class="navbar-brand" href="#">Library Management System (Admin)</a>
-          <a class="btn btn-outline-light ms-auto" href="add_authors.html">Add Authors</a>
-          <a class="btn btn-outline-light ms-2" href="add_genres.html">Add Genres</a>
-          <a class="btn btn-outline-light ms-2" href="add_books.html">Add Books</a>
+          <a class="btn btn-outline-light ms-auto" href="add_authors.php">Add Authors</a>
+          <a class="btn btn-outline-light ms-2" href="add_genres.php">Add Genres</a>
+          <a class="btn btn-outline-light ms-2" href="add_books.php">Add Books</a>
           <div class="dropdown ms-2">
             <button class="btn btn-outline-light dropdown-toggle" type="button" id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false">
               <i class="bi bi-person-circle"></i> <!-- Bootstrap icon -->
@@ -287,7 +291,12 @@
     </div>
   </div>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script> <!-- Add Popper.js -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script> <!-- Correct Bootstrap JS -->
+
+
+ <!-- Add Popper.js -->
+
+<script src="./bootstrap-5.3.3-dist/js/bootstrap.min.js"></script> <!-- Correct Bootstrap JS -->
+<script src="popper.min.js"></script>
+<script src=""></script>
 </body>
 </html>
