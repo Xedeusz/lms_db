@@ -1,16 +1,24 @@
 <?php
- 
-session_start();
- 
+
 require_once('classes/database.php');
 $con = new database();
- 
-$sweetAlertConfig = ""; //Initialize SweetAlert script variable
- 
+session_start();
+$sweetAlertConfig = "";
+
+
+if(empty($id = $_POST['id'])) {
+    header('location:index.php');
+} else {
+    $id = $_POST['id'];
+    $data = $con->viewGenreID($id);
+}
+
+
 if (isset($_POST['adds_genres'])) {
  
+     $id = $_POST['id'];
   $genreName = $_POST['genre_name'];
-  $genreID = $con->addGenre($genreName);
+  $genreID = $con->updateGenre($genreName, $id);
  
  
   if ($genreID) {
@@ -38,7 +46,6 @@ if (isset($_POST['adds_genres'])) {
   }
  
 }
- 
 ?>
 
 <!doctype html>
@@ -88,13 +95,14 @@ if (isset($_POST['adds_genres'])) {
   </nav>
 <div class="container my-5 border border-2 rounded-3 shadow p-4 bg-light">
 
-  <h4 class="mt-5">Add New Genre</h4>
+  <h4 class="mt-5">Update Existing Genre</h4>
   <form id="registrationForm" method="post" action="" novalidate>
     <div class="mb-3">
       <label for="genreName" class="form-label">Genre Name</label>
-      <input type="text" name="genre_name" class="form-control" id="genreName" required>
+      <input type="text" value="<?php echo $data['genre_name']?>" name="genre_name" class="form-control" id="genreName" required>
     </div>
-    <button type="submit" name="adds_genres" class="btn btn-primary">Add Genre</button>
+    <input type="hidden" name="id" value="<?php echo $data['genre_id']; ?>"> 
+    <button type="submit" name="adds_genres" class="btn btn-primary">Update Genre</button>
   </form>
   <script src="./package/dist/sweetalert2.js"></script>
   <?php echo $sweetAlertConfig; ?>
@@ -103,3 +111,5 @@ if (isset($_POST['adds_genres'])) {
 
 </body>
 </html>
+
+

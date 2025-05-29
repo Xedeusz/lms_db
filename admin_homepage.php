@@ -1,3 +1,24 @@
+<?php
+session_start();
+require_once('classes/database.php');
+$con = new database();
+
+if (!isset($_SESSION['user_id'])) {
+    // Check the user type
+   
+   header('Location: index.php');
+
+    exit();
+
+} elseif ($_SESSION['user_type'] === 1) {
+        // Admin user, redirect to admin homepage
+        header('Location: homepage.php');
+        exit();
+    }
+
+
+?>
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -5,8 +26,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="./bootstrap-5.3.3-dist/css/bootstrap.css">
   <link rel="stylesheet" href="./bootstrap-5.3.3-dist/css/bootstrap.min.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css"> <!-- Correct Bootstrap Icons CSS -->
-
+  <link rel="stylesheet" href="./poppers/css/bootstrap-icons.css"> <!-- Local Bootstrap Icons CSS -->
+ 
     <!-- Bootstrap CSS -->
   <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
   <title>Borrowers</title>
@@ -122,36 +143,41 @@
               </tr>
             </thead>
             <tbody>
+
+            <?php 
+            $data = $con->viewAuthors();
+            foreach ($data as $rows) {
+              ?>
+
               <tr>
-                <td>1</td>
-                <td>Mark</td>
-                <td>Twain</td>
-                <td>1835</td>
-                <td>American</td>
+                <td><?php echo $rows['author_id']?></td>
+                <td><?php echo $rows['author_FN']?></td>
+                <td><?php echo $rows['author_LN']?></td>
+                <td><?php echo $rows['author_birthday']?></td>
+                <td><?php echo $rows['author_nat']?></td>
                 <td>
-                  <button type="submit" class="btn btn-warning btn-sm">
-                    <i class="bi bi-pencil-square"></i>
-                  </button>
-                  <button type="submit" name="delete" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this author?')">
-                    <i class="bi bi-x-square"></i>
-                  </button>
+                  <div class="btn-group" role="group">
+                    <form action="update_authors.php" method="post">
+                    
+                    <input type="hidden" name="id" value="<?php echo $rows['author_id']; ?>">  
+                    <button type="submit" class="btn btn-warning btn-sm">
+                      <i class="bi bi-pencil-square"></i>
+                    </button>
+  
+                    </form>
+                    
+                    <form method="POST" class="mx-1">
+                      <input type="hidden" name="id" value="<?php echo $rows['author_id']; ?>">
+                      <button type="submit" name="delete" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this user?')">
+                        <i class="bi bi-x-square"></i>
+                      </button>
+                    </form>
+                  </div>
                 </td>
               </tr>
-              <tr>
-                <td>2</td>
-                <td>Jane</td>
-                <td>Austen</td>
-                <td>1775</td>
-                <td>British</td>
-                <td>
-                  <button type="submit" class="btn btn-warning btn-sm">
-                    <i class="bi bi-pencil-square"></i>
-                  </button>
-                  <button type="submit" name="delete" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this author?')">
-                    <i class="bi bi-x-square"></i>
-                  </button>
-                </td>
-              </tr>
+              <?php
+            }
+            ?>
             </tbody>
           </table>
         </div>
@@ -176,42 +202,37 @@
               </tr>
             </thead>
             <tbody>
+              <?php 
+            $data = $con->viewGenre();
+            foreach ($data as $rows) {
+              ?>
+
               <tr>
-                <td>1</td>
-                <td>Fiction</td>
+                <td><?php echo $rows['genre_id']?></td>
+                <td><?php echo $rows['genre_name']?></td>
                 <td>
-                  <button type="submit" class="btn btn-warning btn-sm">
-                    <i class="bi bi-pencil-square"></i>
-                  </button>
-                  <button type="submit" name="delete" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this genre?')">
-                    <i class="bi bi-x-square"></i>
-                  </button>
+                  <div class="btn-group" role="group">
+                    <form action="update_genre.php" method="post">
+                    
+                    <input type="hidden" name="id" value="<?php echo $rows['genre_id']; ?>">  
+                    <button type="submit" class="btn btn-warning btn-sm">
+                      <i class="bi bi-pencil-square"></i>
+                    </button>
+  
+                    </form>
+                    
+                    <form method="POST" class="mx-1">
+                      <input type="hidden" name="id" value="<?php echo $rows['genre_id']; ?>">
+                      <button type="submit" name="delete" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this user?')">
+                        <i class="bi bi-x-square"></i>
+                      </button>
+                    </form>
+                  </div>
                 </td>
               </tr>
-              <tr>
-                <td>2</td>
-                <td>Non-Fiction</td>
-                <td>
-                  <button type="submit" class="btn btn-warning btn-sm">
-                    <i class="bi bi-pencil-square"></i>
-                  </button>
-                  <button type="submit" name="delete" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this genre?')">
-                    <i class="bi bi-x-square"></i>
-                  </button>
-                </td>
-              </tr>
-              <tr>
-                <td>3</td>
-                <td>Science Fiction</td>
-                <td>
-                  <button type="submit" class="btn btn-warning btn-sm">
-                    <i class="bi bi-pencil-square"></i>
-                  </button>
-                  <button type="submit" name="delete" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this genre?')">
-                    <i class="bi bi-x-square"></i>
-                  </button>
-                </td>
-              </tr>
+              <?php
+            }
+            ?>
             </tbody>
           </table>
         </div>
@@ -292,11 +313,16 @@
   </div>
 </div>
 
-
+<script src="poppers/js/popper.min.js"></script> <!-- Local Popper.js -->
+<script src="./bootstrap-5.3.3-dist/js/bootstrap.js"></script> <!-- Correct Bootstrap JS -->
  <!-- Add Popper.js -->
 
-<script src="./bootstrap-5.3.3-dist/js/bootstrap.min.js"></script> <!-- Correct Bootstrap JS -->
-<script src="popper.min.js"></script>
-<script src=""></script>
+<script>
+function logout() {
+    window.location.href = 'logout.php';
+}
+</script>
 </body>
 </html>
+
+s

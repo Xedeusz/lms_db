@@ -1,34 +1,41 @@
 <?php
- 
-session_start();
- 
+
 require_once('classes/database.php');
 $con = new database();
- 
-$sweetAlertConfig = ""; //Initialize SweetAlert script variable
- 
-if (isset($_POST['add'])) {
- 
-  $authorFN = $_POST['author_FN'];
-  $authorLN = $_POST['author_LN'];
-  $authorBD = $_POST['author_birthdate'];
-  $authorNat = $_POST['author_nat'];
-  $authorID = $con->addAuthor($authorFN, $authorLN, $authorBD, $authorNat);
+session_start();
+$sweetAlertConfig = "";
+
+
+if(empty($id = $_POST['id'])) {
+    header('location:index.php');
+} else {
+    $id = $_POST['id'];
+    $data = $con->viewAuthorsID($id);
+}
+
+
+if (isset($_POST['update'])) {
+  
+  $id = $_POST['id'];
+  $authorFirstName = $_POST['authorFirstName'];
+  $authorLastName = $_POST['authorLastName'];
+  $authorBirthYear = $_POST['authorBirthYear'];
+  $authorNationality = $_POST['authorNationality'];
+  $authorID = $con->updateAuthors($authorFirstName, $authorLastName, $authorBirthYear, $authorNationality, $id);
  
  
   if ($authorID) {
- 
     $sweetAlertConfig = "
     <script>
    
     Swal.fire({
         icon: 'success',
         title: 'Author added successfully!',
-        text: 'The author has been successfully added to the system.',
+        text: 'The author has been successfully updated to the system.',
         confirmationButtontext: 'OK'
      }).then((result) => {
         if (result.isConfirmed) {
-            window.location.href = 'login.php'
+            window.location.href = 'admin_homepage.php'
         }
             });
  
@@ -39,12 +46,8 @@ if (isset($_POST['add'])) {
     $_SESSION['error'] = "Sorry, there was an error signing up.";
    
   }
- 
 }
- 
 ?>
-
-
 
 <!doctype html>
 <html lang="en">
@@ -52,7 +55,7 @@ if (isset($_POST['add'])) {
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="./bootstrap-5.3.3-dist/css/bootstrap.css">
-  <link rel="stylesheet" href="./package/dist/sweetalert2.css">
+   <link rel="stylesheet" href="./package/dist/sweetalert2.css">
   <title>Authors</title>
 </head>
 <body>
@@ -94,24 +97,24 @@ if (isset($_POST['add'])) {
 <div class="container my-5 border border-2 rounded-3 shadow p-4 bg-light">
 
 
-  <h4 class="mt-5">Add New Author</h4>
-  <form method="POST" action="" novalidate>
+  <h4 class="mt-5">Update Existing Author</h4>
+  <form method="POST" action="">
     <div class="mb-3">
       <label for="authorFirstName" class="form-label">First Name</label>
-      <input type="text" name="author_FN" class="form-control" id="authorFirstName" required>
+      <input type="text" value="<?php echo $data['author_FN']?>"  name="authorFirstName" class="form-control" id="authorFirstName" required>
     </div>
     <div class="mb-3">
       <label for="authorLastName" class="form-label">Last Name</label>
-      <input type="text" name="author_LN"  class="form-control" id="authorLastName" required>
+      <input type="text" value="<?php echo $data['author_LN']?>" name="authorLastName" class="form-control" id="authorLastName" required>
     </div>
     <div class="mb-3">
       <label for="authorBirthYear"  class="form-label">Birth Date</label>
-      <input type="date" name="author_birthdate" class="form-control" id="authorBirthYear" max="<?= date('Y-m-d') ?>" required>
+      <input type="date" value="<?php echo isset($data['author_birthday']) ? date('Y-m-d', strtotime($data['author_birthday'])) : ''; ?>" name="authorBirthYear" class="form-control" id="authorBirthYear" max="<?= date('Y-m-d') ?>" required>
     </div>
     <div class="mb-3">
       <label for="authorNationality"  class="form-label">Nationality</label>
-      <select class="form-select" name="author_nat" id="authorNationality" required>
-        <option value="" disabled selected>Select Nationality</option>
+      <select class="form-select" name="authorNationality" id="authorNationality" required>
+        <option value="" disabled selected> <?php echo $data['author_nat']?> </option>
         <option value="American">Filipino</option>
         <option value="American">American</option>
         <option value="British">British</option>
@@ -128,12 +131,16 @@ if (isset($_POST['add'])) {
         <option value="Other">Other</option>
       </select>
     </div>
-    <button type="submit" name="add" class="btn btn-primary">Add Author</button>
-   <script src="./package/dist/sweetalert2.js"></script>
+
+
+    <input type="hidden" name="id" value="<?php echo $data['author_id']; ?>"> 
+    <button type="submit" name="update" class="btn btn-primary">Update Author</button>
+      <script src="./package/dist/sweetalert2.js"></script>
   <?php echo $sweetAlertConfig; ?>
   </form>
 
 </div>
+
 <script src="./bootstrap-5.3.3-dist/js/bootstrap.js"></script>
 
 </body>
