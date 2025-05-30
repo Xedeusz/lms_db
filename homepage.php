@@ -102,6 +102,7 @@ if (!isset($_SESSION['user_id'])) {
   }
 
   function logout() {
+    
     alert('Logout clicked');
     // Add logic for logging out
   }

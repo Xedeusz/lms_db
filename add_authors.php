@@ -23,7 +23,7 @@ if (isset($_POST['add'])) {
    
     Swal.fire({
         icon: 'success',
-        title: 'Author added successfully!',
+        title: 'Author added successfully!', 
         text: 'The author has been successfully added to the system.',
         confirmationButtontext: 'OK'
      }).then((result) => {
@@ -92,6 +92,8 @@ if (isset($_POST['add'])) {
     </div>
   </nav>
 <div class="container my-5 border border-2 rounded-3 shadow p-4 bg-light">
+   
+
 
 
   <h4 class="mt-5">Add New Author</h4>
@@ -125,7 +127,7 @@ if (isset($_POST['add'])) {
         <option value="Russian">Russian</option>
         <option value="South African">South African</option>
         <option value="Spanish">Spanish</option>
-        <option value="Other">Other</option>
+        <option value="Other">Other</option> 
       </select>
     </div>
     <button type="submit" name="add" class="btn btn-primary">Add Author</button>
@@ -138,3 +140,4 @@ if (isset($_POST['add'])) {
 
 </body>
 </html>
+ 

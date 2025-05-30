@@ -19,6 +19,7 @@ if (isset($_POST['multisave'])) {
   $username = $_POST['username'];
   $password = password_hash($_POST['password'],PASSWORD_BCRYPT);
   $firstname = $_POST['firstname'];
+  
   $lastname = $_POST['lastname'];
   $birthday = $_POST['birthday'];
   $sex = $_POST['sex'];

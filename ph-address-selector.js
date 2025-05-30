@@ -18,6 +18,8 @@ var my_handlers = {
         //province
         let dropdown = $('#province');
         dropdown.empty();
+
+        
         dropdown.append('<option selected="true" disabled>Choose State/Province</option>');
         dropdown.prop('selectedIndex', 0);
 

@@ -18,7 +18,7 @@ function handleFileUpload($file)
 
     if (move_uploaded_file($file["tmp_name"], $target_file)) {
         return $target_file;
-    }
+    } //
 
     return false;
 }

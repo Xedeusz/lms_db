@@ -20,6 +20,10 @@ if (isset($_POST['adds_genres'])) {
   $genreName = $_POST['genre_name'];
   $genreID = $con->updateGenre($genreName, $id);
  
+
+
+
+  
  
   if ($genreID) {
  
