@@ -25,7 +25,7 @@ class database{
             $stmt = $con->prepare("INSERT INTO users_pictures (user_id, user_pic_url) VALUES (?, ?)");
             $stmt->execute([$userID, $profile_picture_path]);
  
-            $con->commit();
+            $con->commit(); 
  
             return $userID;
  
@@ -197,5 +197,38 @@ class database{
         return false; 
     }
     }
+
+    function addBook($title, $isbn, $pubyear, $quantity, $genre_ids = [], $author_ids = []) {
+    $con = $this->opencon();
+
+    try {
+        $con->beginTransaction();
+        $stmt = $con->prepare("INSERT INTO books (book_title, book_isbn, book_pubyear, quantity_avail) VALUES (?, ?, ?, ?)");
+        $stmt->execute([$title, $isbn, $pubyear, $quantity]);
+        $book_id =$con->lastInsertId(); 
+
+        foreach ($genre_ids as $genre_id) 
+
+        {
+            $stmt = $con->prepare("INSERT INTO genre_books (genre_id, book_id) VALUES (?, ?)");
+            $stmt->execute([$genre_id, $book_id]);
+        }
+
+        foreach ($author_ids as $author_id){
+        $stmt = $con->prepare("INSERT INTO book_authors (book_id, author_id) VALUES (?, ?)");
+        $stmt->execute([$book_id, $author_id]);
+        }
+
+        for ($i = 0; $i<$quantity; $i++){
+           $stmt = $con->prepare("INSERT INTO book_copy (book_id,is_available) VALUES (?, 1)");
+           $stmt->execute([$book_id]);
+        }
+
+      $con->commit();
+      return $book_id;
+    } catch (PDOException $e){
+        $con->rollBack();
+        return false;
+    }
 }
-?>
+}
